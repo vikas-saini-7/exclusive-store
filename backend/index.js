@@ -2,6 +2,7 @@ const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 
 const authRoutes = require("./routes/authRoutes.js");
+const userRoutes = require("./routes/userRoutes.js");
 
 const app = express();
 
@@ -23,6 +24,8 @@ app.get("/test", (req, res) => {
 });
 
 app.use("/auth", authRoutes);
+
+app.use("/users", userRoutes)
 
 //listen
 const PORT = process.env.PORT || 8000;
