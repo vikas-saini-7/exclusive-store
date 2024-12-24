@@ -1,0 +1,27 @@
+services:
+  backend:
+    container_name: backend
+    image: backend
+    build:
+      context: ./backend
+      dockerfile: backend.dockerfile
+    restart: always
+    ports:
+      - 9000:9000
+    environment:
+      - DATABASE_URL=postgresql://postgres_1:postgres_1@db:5432/postgres_1?schema=public
+  db:
+    container_name: db
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_USER: postgres_1
+      POSTGRES_PASSWORD: postgres_1
+      POSTGRES_DB: postgres_1
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
