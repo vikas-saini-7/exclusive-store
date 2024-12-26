@@ -3,6 +3,9 @@ const { PrismaClient } = require("@prisma/client");
 
 const authRoutes = require("./routes/authRoutes.js");
 const userRoutes = require("./routes/userRoutes.js");
+const categoryRoutes = require("./routes/categoryRoutes.js");
+const productsRoutes = require("./routes/productsRoutes.js");
+const wishlistRoutes = require("./routes/wishlistRoutes.js");
 
 const app = express();
 
@@ -19,13 +22,19 @@ app.use((req, res, next) => {
 // app.use(cors());
 
 //test
-app.get("/test", (req, res) => {
+app.get("/api/test", (req, res) => {
   res.status(200).json({ message: "API working perfectly..." });
 });
 
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
-app.use("/users", userRoutes)
+app.use("/api/users", userRoutes);
+
+app.use("/api/categories", categoryRoutes);
+
+app.use("/api/products", productsRoutes);
+
+app.use("/api/wishlist", wishlistRoutes);
 
 //listen
 const PORT = process.env.PORT || 8000;

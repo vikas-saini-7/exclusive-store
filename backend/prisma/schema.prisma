@@ -13,12 +13,98 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// model User {
+//   id        Int      @id @default(autoincrement())
+//   name      String
+//   email     String?  @unique
+//   phone     String?  @unique
+//   password  String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model Category {
+//   id        Int      @id @default(autoincrement())
+//   name      String   @unique
+//   products  Product[]
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model Product {
+//   id          Int      @id @default(autoincrement())
+//   name        String
+//   description String
+//   price       Float
+//   discount    Float    @default(0.0)
+//   stock       Int
+//   sku         String   @unique
+//   imageUrl    String?
+//   isActive    Boolean  @default(true)
+//   categoryId  Int
+//   category    Category @relation(fields: [categoryId], references: [id])
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+
+//   @@index([categoryId])
+// }
+
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  email     String?  @unique
-  phone     String?  @unique
+  email     String?   @unique
+  phone     String?   @unique
   password  String
+  wishlist  Wishlist?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id            Int            @id @default(autoincrement())
+  name          String
+  description   String
+  price         Float
+  discount      Float          @default(0.0)
+  stock         Int
+  sku           String         @unique
+  imageUrl      String?
+  isActive      Boolean        @default(true)
+  categoryId    Int
+  category      Category       @relation(fields: [categoryId], references: [id])
+  wishlistItems WishlistItem[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([categoryId])
+}
+
+model Wishlist {
+  id     Int            @id @default(autoincrement())
+  userId Int            @unique
+  user   User           @relation(fields: [userId], references: [id])
+  items  WishlistItem[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model WishlistItem {
+  id         Int      @id @default(autoincrement())
+  wishlistId Int
+  productId  Int
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([wishlistId, productId]) // Prevent duplicate product entries
 }
