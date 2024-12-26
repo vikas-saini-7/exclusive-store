@@ -50,13 +50,16 @@ datasource db {
 // }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String
-  email     String?   @unique
-  phone     String?   @unique
-  password  String
-  wishlist  Wishlist?
-  cart      Cart?
+  id       Int       @id @default(autoincrement())
+  name     String
+  email    String?   @unique
+  phone    String?   @unique
+  password String
+  wishlist Wishlist?
+  cart     Cart?
+
+  addresses Address[]
+  orders    Order[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -131,4 +134,28 @@ model CartItem {
   createdAt DateTime @default(now())
 
   @@unique([cartId, productId]) // Prevent duplicate product entries in the cart
+}
+
+model Address {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  street    String
+  city      String
+  state     String
+  zipCode   String
+  country   String
+  isDefault Boolean @default(false)
+  orders    Order[]
+}
+
+model Order {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  addressId     Int
+  user          User     @relation(fields: [userId], references: [id])
+  address       Address  @relation(fields: [addressId], references: [id])
+  paymentMethod String
+  status        String   @default("pending")
+  createdAt     DateTime @default(now())
 }

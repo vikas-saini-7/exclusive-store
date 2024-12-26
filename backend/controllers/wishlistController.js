@@ -22,7 +22,7 @@ const prisma = require("../prisma/client");
 //     @@unique([wishlistId, productId]) // Prevent duplicate product entries
 //   }
 
-exports.getWishlist = async (req, res) => {
+exports.viewWishlist = async (req, res) => {
   const { userId } = req.query;
 
   try {
@@ -46,7 +46,7 @@ exports.getWishlist = async (req, res) => {
   }
 };
 
-exports.addProduct = async (req, res) => {
+exports.addItem = async (req, res) => {
   const { userId, productId } = req.body;
 
   try {
@@ -83,7 +83,7 @@ exports.addProduct = async (req, res) => {
   }
 };
 
-exports.removeProduct = async (req, res) => {
+exports.removeItem = async (req, res) => {
   const { userId, productId } = req.body;
 
   try {

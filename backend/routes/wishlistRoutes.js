@@ -3,12 +3,12 @@ const router = express.Router();
 const wishlistController = require("../controllers/wishlistController.js");
 
 // get wishlist by userId
-router.get("/", wishlistController.getWishlist);
+router.get("/", wishlistController.viewWishlist);
 
 // add product to wishlist
-router.post("/", wishlistController.addProduct);
+router.post("/add", wishlistController.addItem);
 
 // remove product from wishlist
-router.delete("/", wishlistController.removeProduct);
+router.delete("/remove", wishlistController.removeItem);
 
 module.exports = router;

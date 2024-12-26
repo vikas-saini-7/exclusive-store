@@ -1,4 +1,5 @@
-const prisma = require("../prismaClient");
+const prisma = require("../prisma/client");
+
 // model Cart {
 //     id        Int        @id @default(autoincrement())
 //     userId    Int        @unique
