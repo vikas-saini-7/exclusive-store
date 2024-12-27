@@ -53,7 +53,7 @@ export default function Home() {
 
       {/* Explore Our Products  */}
       <section className="my-20">
-        <SectionTitleTop title="This month" />
+        <SectionTitleTop title="Our Products" />
         <ProductsListFixedSection title="Explore Our Products" />
         <div className="flex justify-center w-full items-center">
           <Button size="lg" className="mt-12 bg-red-500 font-bold">
