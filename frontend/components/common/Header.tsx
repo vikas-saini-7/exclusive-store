@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Input } from "../ui/input";
 import {
   IconHeart,
@@ -6,23 +7,34 @@ import {
   IconSearch,
   IconShoppingBag,
 } from "@tabler/icons-react";
+import { UserHeaderAccount } from "./UserHeaderAccount";
 
 const Header: React.FC = () => {
   return (
     <div className="border-b py-1 pt-3">
       <div className="container mx-auto px-8 flex items-center justify-between">
         <div>
-          <h1 className="font-black text-xl">Exclusive</h1>
+          <Link href="/">
+            <h1 className="font-black text-xl">Exclusive</h1>
+          </Link>
         </div>
         <nav>
           <ul className="flex items-center gap-8 lg:gap-12">
-            <li className="py-4">Home</li>
-            <li className="py-4">Contact</li>
-            <li className="py-4">About</li>
-            <li className="py-4">Sign Up</li>
+            <li className="py-4">
+              <Link href="/">Home</Link>
+            </li>
+            <li className="py-4">
+              <Link href="/contact">Contact</Link>
+            </li>
+            <li className="py-4">
+              <Link href="/about">About</Link>
+            </li>
+            <li className="py-4">
+              <Link href="/signup">Sign Up</Link>
+            </li>
           </ul>
         </nav>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
           <div className="relative">
             <Input
               placeholder="What are you looking for?"
@@ -32,8 +44,13 @@ const Header: React.FC = () => {
               <IconSearch size={18} />
             </span>
           </div>
-          <IconHeart size={18} />
-          <IconShoppingBag />
+          <Link href="/wishlist">
+            <IconHeart size={24} />
+          </Link>
+          <Link href="/cart">
+            <IconShoppingBag />
+          </Link>
+          <UserHeaderAccount />
         </div>
       </div>
     </div>
