@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { Input } from "../ui/input";
@@ -8,8 +9,13 @@ import {
   IconShoppingBag,
 } from "@tabler/icons-react";
 import { UserHeaderAccount } from "./UserHeaderAccount";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 const Header: React.FC = () => {
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
   return (
     <div className="border-b py-1 pt-3">
       <div className="container mx-auto px-8 flex items-center justify-between">
@@ -29,9 +35,11 @@ const Header: React.FC = () => {
             <li className="py-4">
               <Link href="/about">About</Link>
             </li>
-            <li className="py-4">
-              <Link href="/signup">Sign Up</Link>
-            </li>
+            {!isAuthenticated && (
+              <li className="py-4">
+                <Link href="/signup">Sign Up</Link>
+              </li>
+            )}
           </ul>
         </nav>
         <div className="flex items-center gap-6">
@@ -50,7 +58,7 @@ const Header: React.FC = () => {
           <Link href="/cart">
             <IconShoppingBag />
           </Link>
-          <UserHeaderAccount />
+          {isAuthenticated && <UserHeaderAccount />}
         </div>
       </div>
     </div>

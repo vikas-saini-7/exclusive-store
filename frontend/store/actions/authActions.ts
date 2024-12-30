@@ -1,5 +1,6 @@
 import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { fetchUserProfile } from "./profileActions";
 
 interface User {
   id: number;
@@ -24,7 +25,7 @@ interface RegisterUserPayload {
 
 export const loginUser = createAsyncThunk<User, LoginUserPayload>(
   "auth/loginUser",
-  async (userData, { rejectWithValue }) => {
+  async (userData, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(
         "http://localhost:8000/api/auth/login",
@@ -32,6 +33,9 @@ export const loginUser = createAsyncThunk<User, LoginUserPayload>(
       );
       const data = response.data;
       localStorage.setItem("user", JSON.stringify(data));
+
+      // Dispatch the fetchUserProfile action after login
+      dispatch(fetchUserProfile());
       return data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import React, { useState } from "react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@/store/actions/authActions";
 import { AppDispatch } from "@/store";
-import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const page: React.FC = () => {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +18,7 @@ const page: React.FC = () => {
   const handleLogin = () => {
     if (email && password) {
       dispatch(loginUser({ email, password }));
-      // toast.success("Successfully logged in");
+      router.push("/");
     } else {
       alert("Please enter email and password");
     }

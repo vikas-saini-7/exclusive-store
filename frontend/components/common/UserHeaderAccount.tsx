@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +14,9 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AppDispatch } from "@/store";
+import { logout } from "@/store/slices/authSlice";
+import { logoutUser } from "@/store/slices/profileSlice";
 import {
   IconLogout,
   IconLogout2,
@@ -23,8 +27,15 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { Icon } from "lucide-react";
+import { useDispatch } from "react-redux";
 
 export function UserHeaderAccount() {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(logoutUser());
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -51,7 +62,7 @@ export function UserHeaderAccount() {
             <IconStar size={24} />
             My Reviews
           </DropdownMenuItem>
-          <DropdownMenuItem className="text-lg">
+          <DropdownMenuItem onClick={handleLogout} className="text-lg">
             <IconLogout2 size={24} />
             Logout
           </DropdownMenuItem>

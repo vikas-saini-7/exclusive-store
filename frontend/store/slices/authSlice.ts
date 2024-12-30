@@ -12,6 +12,7 @@ interface User {
 
 interface AuthState {
   user: User | null;
+  isAuthenticated: boolean;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -27,6 +28,7 @@ const getUserFromLocalStorage = (): User | null => {
 
 const initialState: AuthState = {
   user: getUserFromLocalStorage(),
+  isAuthenticated: false,
   status: "idle",
   error: null,
 };
@@ -35,9 +37,15 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    login: (state) => {
+      state.isAuthenticated = true;
+      toast.success("Login successful");
+    },
     logout: (state) => {
       state.user = null;
+      state.isAuthenticated = false;
       localStorage.removeItem("user");
+      toast.success("Logout successful");
     },
   },
   extraReducers: (builder) => {
@@ -48,8 +56,9 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action: PayloadAction<User>) => {
         state.status = "succeeded";
+        state.isAuthenticated = true;
         state.user = action.payload;
-        toast.success("Login successful");
+        // toast.success("Login successful");
       })
       .addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
         state.status = "failed";
@@ -72,5 +81,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { login, logout } = authSlice.actions;
 export default authSlice.reducer;
