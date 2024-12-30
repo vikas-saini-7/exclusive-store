@@ -27,14 +27,17 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { Icon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 
 export function UserHeaderAccount() {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
   const handleLogout = () => {
     dispatch(logout());
     dispatch(logoutUser());
+    router.push("/");
   };
   return (
     <DropdownMenu>

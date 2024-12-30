@@ -15,7 +15,7 @@ const FeaturedSection: React.FC = () => {
           {/* PlayStation 5 Card */}
           <div className="relative group overflow-hidden rounded-lg h-full">
             <img
-              src="/images/playstation.png"
+              src="/images/playstation.jpg"
               alt="PlayStation 5 Black and White versions"
               className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
             />
@@ -39,7 +39,7 @@ const FeaturedSection: React.FC = () => {
             {/* Women's Collections Card */}
             <div className="relative group overflow-hidden rounded-lg">
               <img
-                src="/images/women_coll.png"
+                src="/images/women-coll.jpg"
                 alt="Women's Collections"
                 className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
               />
@@ -63,7 +63,7 @@ const FeaturedSection: React.FC = () => {
               {/* Speakers Card */}
               <div className="relative group overflow-hidden rounded-lg">
                 <img
-                  src="/images/speakers_coll.png"
+                  src="/images/speakers-coll.jpg"
                   alt="Amazon Wireless Speakers"
                   className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                 />
@@ -85,7 +85,7 @@ const FeaturedSection: React.FC = () => {
               {/* Perfume Card */}
               <div className="relative group overflow-hidden rounded-lg">
                 <img
-                  src="/images/perfumes_coll.png"
+                  src="/images/perfumes-coll.avif"
                   alt="Gucci Intense Oud Perfume"
                   className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                 />

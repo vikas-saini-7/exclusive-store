@@ -52,12 +52,16 @@ const Header: React.FC = () => {
               <IconSearch size={18} />
             </span>
           </div>
-          <Link href="/wishlist">
-            <IconHeart size={24} />
-          </Link>
-          <Link href="/cart">
-            <IconShoppingBag />
-          </Link>
+          {isAuthenticated && (
+            <Link href="/wishlist">
+              <IconHeart size={24} />
+            </Link>
+          )}
+          {isAuthenticated && (
+            <Link href="/cart">
+              <IconShoppingBag />
+            </Link>
+          )}
           {isAuthenticated && <UserHeaderAccount />}
         </div>
       </div>
