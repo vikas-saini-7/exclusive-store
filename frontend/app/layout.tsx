@@ -5,6 +5,8 @@ import Header from "@/components/common/Header";
 import HeaderTop from "@/components/common/HeaderTop";
 import Footer from "@/components/common/Footer";
 import ReduxProvider from "@/providers/ReduxProvider";
+import { toast, Toaster } from "sonner";
+import GetProfile from "@/lib/GetProfile";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +33,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster />
         <ReduxProvider>
+          <GetProfile />
           <HeaderTop />
           <Header />
           <main className="min-h-[60vh]">{children}</main>

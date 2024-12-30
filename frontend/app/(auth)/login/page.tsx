@@ -5,24 +5,22 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import React, { useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loginUser } from "@/store/actions/authActions";
+import { AppDispatch } from "@/store";
+import { toast } from "sonner";
 
 const page: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-      console.log("Login successful:", response.data);
-    } catch (error) {
-      console.error("Error logging in:", error);
+  const handleLogin = () => {
+    if (email && password) {
+      dispatch(loginUser({ email, password }));
+      // toast.success("Successfully logged in");
+    } else {
+      alert("Please enter email and password");
     }
   };
 
@@ -34,7 +32,7 @@ const page: React.FC = () => {
       <div className="w-1/2 space-y-4 gap-4 max-w-[420px]">
         <h1 className="text-3xl font-bold">Log in to Exclusive</h1>
         <p>Enter your details below</p>
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <div className="flex flex-col gap-4">
           <Input
             type="email"
             placeholder="Email or Phone"
@@ -48,12 +46,12 @@ const page: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <div className="flex justify-between items-center">
-            <Button type="submit" className="bg-red-500 font-bold">
+            <Button onClick={handleLogin} className="bg-red-500 font-bold">
               Log In
             </Button>
             <p>Forgot password</p>
           </div>
-        </form>
+        </div>
         <p className="text-center">
           Don't have an Account?{" "}
           <Link href="/signup" className="underline text-blue-500">
