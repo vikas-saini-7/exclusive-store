@@ -1,10 +1,18 @@
+"use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Facebook, Twitter, Instagram, Linkedin, Send } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import AdminHeader from "../admin/AdminHeader";
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) {
+    return;
+  }
+
   return (
     <footer className="w-full bg-black text-white">
       <div className="container px-8 py-12 mx-auto">

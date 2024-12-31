@@ -11,11 +11,17 @@ import {
 import { UserHeaderAccount } from "./UserHeaderAccount";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { usePathname } from "next/navigation";
 
 const Header: React.FC = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) {
+    return;
+  }
+
   return (
     <div className="border-b py-1 pt-3">
       <div className="container mx-auto px-8 flex items-center justify-between">

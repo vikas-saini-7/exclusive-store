@@ -1,7 +1,13 @@
+"use client";
 import { IconChevronCompactDown, IconChevronDown } from "@tabler/icons-react";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const HeaderTop: React.FC = () => {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) {
+    return;
+  }
   return (
     <div className="bg-black text-white">
       <div className=" container mx-auto px-8 flex items-center justify-between text-sm py-2">
