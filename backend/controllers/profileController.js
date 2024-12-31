@@ -32,3 +32,38 @@ exports.getProfile = async (req, res) => {
     });
   }
 };
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const { name, email, phone } = req.body;
+
+    if (!userId) {
+      throw new Error("User ID is missing from request");
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        name,
+        email,
+        phone,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+      },
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user profile:", error); // Log the error
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+};

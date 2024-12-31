@@ -16,10 +16,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AppDispatch } from "@/store";
 import { logout } from "@/store/slices/authSlice";
-import { logoutUser } from "@/store/slices/profileSlice";
 import {
   IconLogout,
   IconLogout2,
+  IconSettings,
+  IconSettings2,
   IconShoppingBagCheck,
   IconStar,
   IconUser,
@@ -27,6 +28,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { Icon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 
@@ -36,7 +38,6 @@ export function UserHeaderAccount() {
 
   const handleLogout = () => {
     dispatch(logout());
-    dispatch(logoutUser());
     router.push("/");
   };
   return (
@@ -49,22 +50,36 @@ export function UserHeaderAccount() {
       <DropdownMenuContent className="w-56 mr-8 bg-black/70 backdrop-blur text-white border border-gray-500">
         {/* <DropdownMenuSeparator /> */}
         <DropdownMenuGroup>
-          <DropdownMenuItem className="text-lg">
-            <IconUser size={24} />
-            Manage My Account
-          </DropdownMenuItem>
-          <DropdownMenuItem className="text-lg">
-            <IconShoppingBagCheck size={24} />
-            My Order
-          </DropdownMenuItem>
-          <DropdownMenuItem className="text-lg">
-            <IconX size={24} />
-            My Cancellations
-          </DropdownMenuItem>
-          <DropdownMenuItem className="text-lg">
-            <IconStar size={24} />
-            My Reviews
-          </DropdownMenuItem>
+          <Link href="/account">
+            <DropdownMenuItem className="text-lg">
+              <IconUser size={24} />
+              Manage My Account
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/account/my-orders">
+            <DropdownMenuItem className="text-lg">
+              <IconShoppingBagCheck size={24} />
+              My Order
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/account/my-cancellations">
+            <DropdownMenuItem className="text-lg">
+              <IconX size={24} />
+              My Cancellations
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/account/my-reviews">
+            <DropdownMenuItem className="text-lg">
+              <IconStar size={24} />
+              My Reviews
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/account/settings">
+            <DropdownMenuItem className="text-lg">
+              <IconSettings2 size={24} />
+              Settings
+            </DropdownMenuItem>
+          </Link>
           <DropdownMenuItem onClick={handleLogout} className="text-lg">
             <IconLogout2 size={24} />
             Logout

@@ -6,4 +6,6 @@ const authenticateToken = require("../middlewares/authenticateToken.js");
 // get profile by id
 router.get("/", authenticateToken, profileController.getProfile);
 
+router.put("/", authenticateToken, profileController.updateProfile);
+
 module.exports = router;
