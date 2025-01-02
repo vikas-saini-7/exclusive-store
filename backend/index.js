@@ -10,6 +10,7 @@ const cartRoutes = require("./routes/cartRoutes.js");
 const orderRoutes = require("./routes/orderRoutes.js");
 const addressRoutes = require("./routes/addressRoutes.js");
 const profileRoutes = require("./routes/profileRoutes.js");
+const statsRoutes = require("./routes/statsRoutes.js");
 
 const app = express();
 
@@ -48,6 +49,8 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/address", addressRoutes);
 
 app.use("/api/profile", profileRoutes);
+
+app.use("/api/stats", statsRoutes);
 
 //listen
 const PORT = process.env.PORT || 8000;
