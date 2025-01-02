@@ -2,7 +2,11 @@ const prisma = require("../prisma/client");
 
 exports.getAllProducts = async (req, res) => {
   try {
-    const products = await prisma.product.findMany();
+    const products = await prisma.product.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
     res.status(200).json(products);
   } catch (error) {
     console.error(error);
@@ -75,6 +79,7 @@ exports.updateProduct = async (req, res) => {
     sku,
     imageUrl,
     categoryId,
+    isActive,
   } = req.body;
 
   try {
@@ -90,6 +95,7 @@ exports.updateProduct = async (req, res) => {
         stock,
         sku,
         imageUrl,
+        isActive,
         categoryId: parseInt(categoryId),
       },
     });
@@ -105,13 +111,13 @@ exports.deleteProduct = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await prisma.product.delete({
+    const product = await prisma.product.delete({
       where: {
         id: parseInt(id),
       },
     });
 
-    res.status(200).json({ message: "Product deleted successfully" });
+    res.status(200).json({ message: "Product deleted successfully", product });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error });

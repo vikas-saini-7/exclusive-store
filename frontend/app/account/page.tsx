@@ -7,12 +7,6 @@ import { useSelector } from "react-redux";
 
 const page: React.FC = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  const userProfile = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+1234567890",
-    imageUrl: "https://via.placeholder.com/100",
-  };
 
   return (
     <div className="container mx-auto px-8 mt-10 bg-white flex gap-8">
