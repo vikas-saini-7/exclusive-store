@@ -10,14 +10,14 @@ const FeaturedSection: React.FC = () => {
       <div className=" container mx-auto px-8">
         <SectionTitle title="New Arrival" />
       </div>
-      <section className="container mx-auto px-8 mt-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <section className="container mx-auto px-8 mt-12 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
           {/* PlayStation 5 Card */}
-          <div className="relative group overflow-hidden rounded-lg h-full">
+          <div className="relative group overflow-hidden rounded-lg h-full ">
             <img
               src="/images/playstation.jpg"
               alt="PlayStation 5 Black and White versions"
-              className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+              className="object-cover w-full h-full  transition-transform duration-300 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-black/60 transition-opacity">
               <div className="absolute bottom-0 p-6">
@@ -41,7 +41,7 @@ const FeaturedSection: React.FC = () => {
               <img
                 src="/images/women-coll.jpg"
                 alt="Women's Collections"
-                className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                className="object-cover aspect-[16/9] w-full h-full transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/60 transition-opacity">
                 <div className="absolute bottom-0 p-6">
@@ -65,7 +65,7 @@ const FeaturedSection: React.FC = () => {
                 <img
                   src="/images/speakers-coll.jpg"
                   alt="Amazon Wireless Speakers"
-                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover aspect-square w-full h-full transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/60 transition-opacity">
                   <div className="absolute bottom-0 p-4">
@@ -87,7 +87,7 @@ const FeaturedSection: React.FC = () => {
                 <img
                   src="/images/perfumes-coll.avif"
                   alt="Gucci Intense Oud Perfume"
-                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover aspect-square w-full h-full transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/60 transition-opacity">
                   <div className="absolute bottom-0 p-4">

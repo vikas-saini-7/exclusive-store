@@ -1,4 +1,5 @@
-import SectionTitle from "@/components/common/SectionTitle";
+"use client";
+import { useEffect, useState } from "react";
 import SectionTitleTop from "@/components/common/SectionTitleTop";
 import BrowseByCategory from "@/components/home/BrowseByCategory";
 import FeaturedSection from "@/components/home/FeaturedSection";
@@ -7,11 +8,54 @@ import Information from "@/components/home/Information";
 import MusicBanner from "@/components/home/MusicBanner";
 import ProductsListFixedSection from "@/components/home/ProductsListFixedSection";
 import ProductsListSection from "@/components/home/ProductsListSection";
-import ProductsList from "@/components/home/ProductsListSection";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import axios from "axios";
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  discount: number;
+  stock: number;
+  sku: string;
+  imageUrl: string;
+  isActive: boolean;
+  categoryId: number;
+}
 
 export default function Home() {
+  const [flashProducts, setFlashProducts] = useState<Product[]>([]);
+  const [bestSellingProducts, setbestSellingProducts] = useState<Product[]>([]);
+
+  // get flash products
+  const fetchFlashProducts = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:8000/api/products"
+      );
+      setFlashProducts(res.data);
+    } catch (error) {
+      console.log("Error in get flash product", error);
+    }
+  };
+
+  // get best selling products
+  const fetchbestSellingProducts = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/api/products");
+      setbestSellingProducts(res.data);
+    } catch (error) {
+      console.log("Error in get best selling product", error);
+    }
+  };
+
+  // init data
+  useEffect(() => {
+    fetchFlashProducts();
+    fetchbestSellingProducts();
+  }, []);
+
   return (
     <div>
       <Hero />
@@ -19,7 +63,7 @@ export default function Home() {
       {/* Todays Flash Sales  */}
       <section className="mb-20">
         <SectionTitleTop title="Today's" />
-        <ProductsListSection title="Flash Sales" />
+        <ProductsListSection products={flashProducts} title="Flash Sales" />
         <div className="flex justify-center w-full items-center">
           <Button size="lg" className="mt-12 bg-red-500 font-bold">
             View All Products
@@ -40,7 +84,10 @@ export default function Home() {
       {/* Best Selling Products  */}
       <section className="my-20">
         <SectionTitleTop title="This month" />
-        <ProductsListSection title="Best Selling Product" />
+        <ProductsListSection
+          products={bestSellingProducts}
+          title="Best Selling Product"
+        />
         <div className="flex justify-center w-full items-center">
           <Button size="lg" className="mt-12 bg-red-500 font-bold">
             View All Products
@@ -54,7 +101,10 @@ export default function Home() {
       {/* Explore Our Products  */}
       <section className="my-20">
         <SectionTitleTop title="Our Products" />
-        <ProductsListFixedSection title="Explore Our Products" />
+        <ProductsListFixedSection
+          products={flashProducts}
+          title="Explore Our Products"
+        />
         <div className="flex justify-center w-full items-center">
           <Button size="lg" className="mt-12 bg-red-500 font-bold">
             View All Products

@@ -13,6 +13,7 @@ exports.getAllProducts = async (req, res) => {
     res.status(500).json({ message: error });
   }
 };
+
 exports.getProductById = async (req, res) => {
   const id = parseInt(req.params.id);
 

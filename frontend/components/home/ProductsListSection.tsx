@@ -3,11 +3,28 @@ import SectionTitle from "../common/SectionTitle";
 import ProductsListSwiper from "./ProductsListSwiper";
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  discount: number;
+  stock: number;
+  sku: string;
+  imageUrl: string;
+  isActive: boolean;
+  categoryId: number;
+}
+
 type ProductsListSectionProps = {
   title: string;
+  products: Product[];
 };
 
-const ProductsListSection: React.FC<ProductsListSectionProps> = ({ title }) => {
+const ProductsListSection: React.FC<ProductsListSectionProps> = ({
+  title,
+  products,
+}) => {
   return (
     <div>
       <div className="flex items-center justify-between container mx-auto px-8">
@@ -21,7 +38,7 @@ const ProductsListSection: React.FC<ProductsListSectionProps> = ({ title }) => {
           </div>
         </div>
       </div>
-      <ProductsListSwiper />
+      <ProductsListSwiper products={products} />
     </div>
   );
 };

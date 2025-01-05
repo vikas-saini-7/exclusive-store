@@ -1,27 +1,5 @@
 const prisma = require("../prisma/client");
 
-// model Cart {
-//     id        Int        @id @default(autoincrement())
-//     userId    Int        @unique
-//     user      User       @relation(fields: [userId], references: [id])
-//     items     CartItem[]
-//     createdAt DateTime   @default(now())
-//     updatedAt DateTime   @updatedAt
-//   }
-
-//   model CartItem {
-//     id        Int     @id @default(autoincrement())
-//     cartId    Int
-//     productId Int
-//     quantity  Int     @default(1)
-//     cart      Cart    @relation(fields: [cartId], references: [id])
-//     product   Product @relation(fields: [productId], references: [id])
-
-//     createdAt DateTime @default(now())
-
-//     @@unique([cartId, productId]) // Prevent duplicate product entries in the cart
-//   }
-
 exports.addItem = async (req, res) => {
   const { userId, productId } = req.body;
   const cart = await prisma.cart.findFirst({

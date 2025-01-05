@@ -35,7 +35,7 @@ const page = () => {
       <Table className="min-w-full bg-white">
         <TableHeader>
           <TableRow>
-            {/* <TableHead className="px-4 py-2">ID</TableHead> */}
+            <TableHead className="px-4 py-2">ID</TableHead>
             <TableHead className="px-4 py-2">Name</TableHead>
             <TableHead className="px-4 py-2">Email</TableHead>
             <TableHead className="px-4 py-2">Phone</TableHead>
@@ -46,7 +46,7 @@ const page = () => {
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.id}>
-              {/* <TableCell className="border px-4 py-2">{user.id}</TableCell> */}
+              <TableCell className="border px-4 py-2">{user.id}</TableCell>
               <TableCell className="border px-4 py-2">{user.name}</TableCell>
               <TableCell className="border px-4 py-2">{user.email}</TableCell>
               <TableCell className="border px-4 py-2">{user.phone}</TableCell>

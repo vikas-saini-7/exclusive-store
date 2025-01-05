@@ -4,12 +4,27 @@ import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import ProductsListSwiper from "./ProductsListSwiper";
 import ProductsListFixedSwiper from "./ProductsListFixedSwiper";
 
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  discount: number;
+  stock: number;
+  sku: string;
+  imageUrl: string;
+  isActive: boolean;
+  categoryId: number;
+}
+
 type ProductsListFixedSectionProps = {
   title: string;
+  products: Product[];
 };
 
 const ProductsListFixedSection: React.FC<ProductsListFixedSectionProps> = ({
   title,
+  products,
 }) => {
   return (
     <div>
@@ -24,9 +39,9 @@ const ProductsListFixedSection: React.FC<ProductsListFixedSectionProps> = ({
           </div>
         </div>
       </div>
-      <ProductsListFixedSwiper />
+      <ProductsListFixedSwiper products={products} />
       <div className="mb-8"></div>
-      <ProductsListFixedSwiper />
+      <ProductsListFixedSwiper products={products} />
     </div>
   );
 };

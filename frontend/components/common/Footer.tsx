@@ -100,23 +100,23 @@ export default function Footer() {
               Save $3 with App New User Only
             </p>
             <div className="grid grid-cols-2 gap-2">
-              <Image
-                src="/placeholder.svg"
+              <img
+                src="/images/qr-code.svg"
                 alt="QR Code"
                 width={100}
                 height={100}
                 className="bg-white p-2 rounded-lg"
               />
               <div className="space-y-2">
-                <Image
-                  src="/placeholder.svg"
+                <img
+                  src="/images/play-store.webp"
                   alt="Google Play"
                   width={120}
                   height={40}
                   className="bg-white p-1 rounded-lg"
                 />
                 <Image
-                  src="/placeholder.svg"
+                  src="/images/app-store.svg"
                   alt="App Store"
                   width={120}
                   height={40}
