@@ -7,10 +7,10 @@ const categoryRoutes = require("./routes/categoryRoutes.js");
 const productsRoutes = require("./routes/productsRoutes.js");
 const wishlistRoutes = require("./routes/wishlistRoutes.js");
 const cartRoutes = require("./routes/cartRoutes.js");
-const orderRoutes = require("./routes/orderRoutes.js");
 const addressRoutes = require("./routes/addressRoutes.js");
 const profileRoutes = require("./routes/profileRoutes.js");
 const statsRoutes = require("./routes/statsRoutes.js");
+const orderRoutes = require("./routes/orderRoutes.js");
 
 const app = express();
 
@@ -44,13 +44,13 @@ app.use("/api/wishlist", wishlistRoutes);
 
 app.use("/api/cart", cartRoutes);
 
-app.use("/api/orders", orderRoutes);
-
 app.use("/api/address", addressRoutes);
 
 app.use("/api/profile", profileRoutes);
 
 app.use("/api/stats", statsRoutes);
+
+app.use("/api/orders", orderRoutes);
 
 //listen
 const PORT = process.env.PORT || 8000;

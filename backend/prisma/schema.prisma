@@ -89,6 +89,8 @@ model Product {
   updatedAt     DateTime       @updatedAt
   CartItem      CartItem[]
 
+  orderItems OrderItem[] // New relation for orders
+
   @@index([categoryId])
 }
 
@@ -157,5 +159,31 @@ model Order {
   address       Address  @relation(fields: [addressId], references: [id])
   paymentMethod String
   status        String   @default("pending")
+  totalAmount   Float
+  currency      String   @default("INR")
+  discount      Float    @default(0)
+  // taxAmount     Float    @default(0)
+  shippingCost  Float    @default(0)
+  // trackingId    String?
   createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id        Int   @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int   @default(1)
+  price     Float // Price at order time
+  total     Float // quantity * price
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([orderId, productId]) // Ensures unique product per order
 }
