@@ -65,7 +65,7 @@ exports.addItem = async (req, res) => {
 };
 
 exports.removeItem = async (req, res) => {
-  const { userId, productId } = req.body;
+  const { userId, productId } = req.params;
   const cart = await prisma.cart.findFirst({
     where: {
       userId: userId,
@@ -111,11 +111,64 @@ exports.removeItem = async (req, res) => {
   res.json({ message: "Item removed from cart" });
 };
 
-exports.viewCart = async (req, res) => {
-  const { userId } = req.body;
+exports.removeCartItem = async (req, res) => {
+  const { userId, cartItemId } = req.params;
   const cart = await prisma.cart.findFirst({
     where: {
-      userId: userId,
+      userId: parseInt(userId),
+    },
+  });
+
+  if (!cart) {
+    return res.status(404).json({ error: "Cart not found" });
+  }
+
+  const item = await prisma.cartItem.findFirst({
+    where: {
+      id: parseInt(cartItemId),
+    },
+  });
+
+  if (!item) {
+    return res.status(404).json({ error: "Item not found" });
+  }
+
+  await prisma.cartItem.delete({
+    where: {
+      id: parseInt(cartItemId),
+    },
+  });
+
+  res.json({ message: "Item removed from cart" });
+};
+
+exports.clearCart = async (req, res) => {
+  const { userId } = req.params;
+  const cart = await prisma.cart.findFirst({
+    where: {
+      userId: parseInt(userId),
+    },
+  });
+
+  if (!cart) {
+    return res.status(404).json({ error: "Cart not found" });
+  }
+
+  await prisma.cartItem.deleteMany({
+    where: {
+      cartId: cart.id,
+    },
+  });
+
+  res.json({ message: "Cart cleared" });
+};
+
+exports.viewCart = async (req, res) => {
+  const { userId } = req.params;
+  console.log(userId);
+  const cart = await prisma.cart.findFirst({
+    where: {
+      userId: parseInt(userId),
     },
     include: {
       items: {
