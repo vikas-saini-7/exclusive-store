@@ -1,21 +1,52 @@
 import { Trash2 } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
+import { removeItemFromWishlist } from "@/store/actions/wishlistActions";
 
-export default function WishlistProductCard() {
+interface WishlistProductCardProps {
+  id: number;
+  name: string;
+  price: number;
+  discount: number;
+  imageUrl: string;
+}
+
+const WishlistProductCard: React.FC<WishlistProductCardProps> = ({
+  id,
+  name,
+  price,
+  discount,
+  imageUrl,
+}) => {
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleRemove = () => {
+    if (userId) {
+      dispatch(removeItemFromWishlist({ userId, productId: id }));
+    }
+  };
+
   return (
     <Card className="w-full max-w-[300px] border-0 bg-gray-100">
       <div className="relative">
         {/* Discount Badge */}
         <div className="absolute left-2 top-2 z-10">
           <span className="rounded bg-red-500 px-2 py-1 text-xs font-medium text-white">
-            -35%
+            -{discount}%
           </span>
         </div>
 
         {/* Delete Button */}
         <div className="absolute right-2 top-2 z-10">
-          <Button variant="ghost" size="icon" className="h-8 w-8">
+          <Button
+            onClick={handleRemove}
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+          >
             <Trash2 className="h-4 w-4 text-gray-500" />
           </Button>
         </div>
@@ -23,7 +54,7 @@ export default function WishlistProductCard() {
         {/* Product Image */}
         <div className="relative aspect-square">
           <img
-            src="https://png.pngtree.com/png-vector/20240815/ourmid/pngtree-black-wireless-earbuds-in-charging-case---clipart-illustration-png-image_13492239.png"
+            src={imageUrl}
             alt="Gucci duffle bag"
             className="h-full w-full object-cover"
           />
@@ -31,10 +62,12 @@ export default function WishlistProductCard() {
       </div>
 
       <CardContent className="p-4">
-        <h3 className="font-medium">Gucci duffle bag</h3>
+        <h3 className="font-medium">{name}</h3>
         <div className="mt-1 flex items-center gap-2">
-          <span className="text-lg font-bold text-red-500">$960</span>
-          <span className="text-sm text-gray-500 line-through">$1160</span>
+          <span className="text-lg font-bold text-red-500">
+            ${(price - (price * discount) / 100).toFixed(2)}
+          </span>
+          <span className="text-sm text-gray-500 line-through">${price}</span>
         </div>
       </CardContent>
 
@@ -64,4 +97,6 @@ export default function WishlistProductCard() {
       </CardFooter>
     </Card>
   );
-}
+};
+
+export default WishlistProductCard;

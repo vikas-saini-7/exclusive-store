@@ -23,7 +23,7 @@ const prisma = require("../prisma/client");
 //   }
 
 exports.viewWishlist = async (req, res) => {
-  const { userId } = req.query;
+  const { userId } = req.params;
 
   try {
     const wishlist = await prisma.wishlist.findFirst({
@@ -38,6 +38,10 @@ exports.viewWishlist = async (req, res) => {
         },
       },
     });
+
+    if (!wishlist) {
+      return res.status(200).json({ message: "Wishlist is empty", items: [] });
+    }
 
     res.status(200).json(wishlist);
   } catch (error) {
@@ -76,7 +80,13 @@ exports.addItem = async (req, res) => {
       });
     }
 
-    res.status(201).json({ message: "Product added to wishlist" });
+    const product = await prisma.product.findUnique({
+      where: {
+        id: parseInt(productId),
+      },
+    });
+
+    res.status(200).json({ message: "Product added to wishlist", product });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error });
@@ -84,7 +94,7 @@ exports.addItem = async (req, res) => {
 };
 
 exports.removeItem = async (req, res) => {
-  const { userId, productId } = req.body;
+  const { userId, productId } = req.params;
 
   try {
     const wishlist = await prisma.wishlist.findFirst({
@@ -100,7 +110,9 @@ exports.removeItem = async (req, res) => {
       },
     });
 
-    res.status(200).json({ message: "Product removed from wishlist" });
+    res
+      .status(200)
+      .json({ message: "Product removed from wishlist", productId });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error });

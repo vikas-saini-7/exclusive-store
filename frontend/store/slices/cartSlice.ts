@@ -15,18 +15,18 @@ interface Product {
   updatedAt: string;
 }
 
-interface CartItem {
-  id: number;
-  cartId: number;
-  productId: number;
-  quantity: number;
-  createdAt: string;
-  product: Product;
-}
+// interface CartItem {
+//   id: number;
+//   cartId: number;
+//   productId: number;
+//   quantity: number;
+//   createdAt: string;
+//   product: Product;
+// }
 
-interface CartItems {
-  [key: string]: CartItem;
-}
+// interface CartItems {
+//   [key: string]: CartItem;
+// }
 
 interface CartState {
   products: Product[];

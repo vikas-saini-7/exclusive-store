@@ -50,19 +50,21 @@ exports.signup = async (req, res) => {
 
 // Login - authenticate a user
 exports.login = async (req, res) => {
-  const { email, phone, password } = req.body;
+  const { emailOrPhone, password } = req.body;
 
-  if (!email && !phone) {
+  if (!emailOrPhone) {
     return res
       .status(400)
       .json({ message: "Either email or phone is required" });
   }
 
+  console.log(emailOrPhone, password);
+
   try {
     // Find the user by email or phone
     const user = await prisma.user.findFirst({
       where: {
-        OR: [{ email: email }, { phone: phone }],
+        OR: [{ email: emailOrPhone }, { phone: emailOrPhone }],
       },
     });
 
@@ -74,7 +76,7 @@ exports.login = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Wrong password" });
     }
 
     // Generate JWT token

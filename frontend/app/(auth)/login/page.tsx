@@ -12,12 +12,13 @@ import { useRouter } from "next/navigation";
 const page: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const [email, setEmail] = useState("");
+  const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    if (email && password) {
-      dispatch(loginUser({ email, password }));
+    if (emailOrPhone && password) {
+      console.log(emailOrPhone, password);
+      dispatch(loginUser({ emailOrPhone, password }));
       router.push("/");
     } else {
       alert("Please enter email and password");
@@ -34,10 +35,10 @@ const page: React.FC = () => {
         <p>Enter your details below</p>
         <div className="flex flex-col gap-4">
           <Input
-            type="email"
+            type="text"
             placeholder="Email or Phone"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={emailOrPhone}
+            onChange={(e) => setEmailOrPhone(e.target.value)}
           />
           <Input
             type="password"

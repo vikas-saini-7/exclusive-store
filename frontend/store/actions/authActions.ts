@@ -11,8 +11,7 @@ interface User {
 }
 
 interface LoginUserPayload {
-  email?: string;
-  phone?: string;
+  emailOrPhone?: string;
   password: string;
 }
 

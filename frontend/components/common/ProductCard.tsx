@@ -3,6 +3,15 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
+import {
+  addItemToWishlist,
+  getWishlist,
+  removeItemFromWishlist,
+} from "@/store/actions/wishlistActions";
+import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
+import { useEffect } from "react";
 
 interface ProductCardProps {
   id: number;
@@ -31,6 +40,29 @@ export default function ProductCard({
   categoryId,
   rating = 5,
 }: ProductCardProps) {
+  const dispatch = useDispatch<AppDispatch>();
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+
+  const wishlist = useSelector((state: RootState) => state.wishlist.productIds);
+  const isLiked = wishlist.includes(id);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(getWishlist(userId));
+    }
+  }, [dispatch]);
+
+  const handleWishlistToggle = () => {
+    if (isLiked) {
+      if (userId) {
+        dispatch(removeItemFromWishlist({ userId, productId: id }));
+      }
+    } else {
+      if (userId) {
+        dispatch(addItemToWishlist({ userId, productId: id }));
+      }
+    }
+  };
   return (
     <Card className="relative w-full max-w-sm overflow-hidden border-0">
       {/* Discount Badge */}
@@ -43,20 +75,34 @@ export default function ProductCard({
 
       {/* Action Buttons */}
       <div className="absolute right-3 top-3 z-10 flex flex-col gap-2">
-        <Button
-          variant="secondary"
-          size="icon"
-          className="h-8 w-8 rounded-full bg-white/90 backdrop-blur-sm"
-        >
-          <Heart className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="secondary"
-          size="icon"
-          className="h-8 w-8 rounded-full bg-white/90 backdrop-blur-sm"
-        >
-          <Eye className="h-4 w-4" />
-        </Button>
+        {isLiked ? (
+          <Button
+            variant="secondary"
+            size="icon"
+            className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm text-red-500"
+            onClick={handleWishlistToggle}
+          >
+            <IconHeartFilled size={18} />
+          </Button>
+        ) : (
+          <Button
+            variant="secondary"
+            size="icon"
+            className="h-10 w-10 rounded-full bg-white/90 backdrop-blur-sm"
+            onClick={handleWishlistToggle}
+          >
+            <IconHeart size={18} />
+          </Button>
+        )}
+        {/* <Link href={`/products/${id}`}>
+          <Button
+            variant="secondary"
+            size="icon"
+            className="h-8 w-8 rounded-full bg-white/90 backdrop-blur-sm"
+          >
+            <Eye className="h-4 w-4" />
+          </Button>
+        </Link> */}
       </div>
 
       {/* Product Image */}
