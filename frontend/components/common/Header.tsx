@@ -1,28 +1,38 @@
 "use client";
-import React from "react";
+import React, { use, useEffect } from "react";
 import Link from "next/link";
 import { Input } from "../ui/input";
 import { IconHeart, IconSearch, IconShoppingBag } from "@tabler/icons-react";
 import { UserHeaderAccount } from "./UserHeaderAccount";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store";
 import { usePathname } from "next/navigation";
+import { getCart } from "@/store/actions/cartActions";
 
 const Header: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const cart = useSelector((state: RootState) => state.cart);
   const pathname = usePathname();
   if (pathname.startsWith("/admin")) {
     return;
   }
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(getCart(userId));
+    }
+  }, [userId]);
 
   return (
     <div className="border-b py-1 pt-3">
       <div className="container mx-auto px-8 flex items-center justify-between">
         <div>
           <Link href="/">
-            <h1 className="font-black text-xl">Logo</h1>
+            <h1 className="font-black text-xl">Exclusive</h1>
           </Link>
         </div>
         <nav>
@@ -59,8 +69,13 @@ const Header: React.FC = () => {
             </Link>
           )}
           {isAuthenticated && (
-            <Link href="/cart">
+            <Link href="/cart" className="relative">
               <IconShoppingBag />
+              {cart.items.length > 0 && (
+                <p className="absolute -top-3 -right-3 bg-red-500 text-white h-5 w-5 rounded-full flex items-center justify-center">
+                  {cart.items.length}
+                </p>
+              )}
             </Link>
           )}
           {isAuthenticated && <UserHeaderAccount />}

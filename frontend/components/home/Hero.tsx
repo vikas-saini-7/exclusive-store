@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import HeroSwiper from "./HeroSwiper";
+import Link from "next/link";
 
 interface Category {
   id: number;
@@ -32,12 +33,14 @@ const Hero: React.FC = () => {
     <div className="container mx-auto px-8 flex mb-24">
       <div className="w-1/5 border-r pt-12 space-y-3">
         {categories.slice(0, 10).map((category, index) => (
-          <div
-            key={index}
-            className="text-lg hover:text-red-500 cursor-pointer"
-          >
-            {category.name}
-          </div>
+          <Link href={`/products/category/${category.id}`} className="block" key={index}>
+            <div
+              key={index}
+              className="text-lg hover:text-red-500 cursor-pointer"
+            >
+              {category.name}
+            </div>
+          </Link>
         ))}
       </div>
       <div className="w-4/5 pt-12 pl-12">

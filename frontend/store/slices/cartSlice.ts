@@ -80,10 +80,23 @@ const cartSlice = createSlice({
       .addCase(
         removeFromCart.fulfilled,
         (state, action: PayloadAction<any>) => {
-          state.loading = false;
-          state.items = state.items.filter(
-            (product) => product.id !== action.payload.productId
+          const itemIndex = state.items.findIndex(
+            (item) => item.productId === Number(action.payload)
           );
+
+          if (itemIndex >= 0) {
+            // Item exists, decrement quantity
+            state.items[itemIndex].quantity -= 1;
+
+            // Remove item if quantity becomes 0
+            if (state.items[itemIndex].quantity <= 0) {
+              state.items = state.items.filter(
+                (item) => item.productId !== Number(action.payload)
+              );
+            }
+          }
+          state.loading = false;
+          toast.success("Decreased item successfully");
         }
       )
       .addCase(removeFromCart.rejected, (state, action: PayloadAction<any>) => {

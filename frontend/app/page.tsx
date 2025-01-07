@@ -10,6 +10,7 @@ import ProductsListFixedSection from "@/components/home/ProductsListFixedSection
 import ProductsListSection from "@/components/home/ProductsListSection";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import Link from "next/link";
 
 interface Product {
   id: number;
@@ -31,9 +32,7 @@ export default function Home() {
   // get flash products
   const fetchFlashProducts = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:8000/api/products"
-      );
+      const res = await axios.get("http://localhost:8000/api/products");
       setFlashProducts(res.data);
     } catch (error) {
       console.log("Error in get flash product", error);
@@ -65,9 +64,11 @@ export default function Home() {
         <SectionTitleTop title="Today's" />
         <ProductsListSection products={flashProducts} title="Flash Sales" />
         <div className="flex justify-center w-full items-center">
-          <Button size="lg" className="mt-12 bg-red-500 font-bold">
-            View All Products
-          </Button>
+          <Link href="/products">
+            <Button size="lg" className="mt-12 bg-red-500 font-bold">
+              View All Products
+            </Button>
+          </Link>
         </div>
       </section>
 
@@ -89,9 +90,11 @@ export default function Home() {
           title="Best Selling Product"
         />
         <div className="flex justify-center w-full items-center">
-          <Button size="lg" className="mt-12 bg-red-500 font-bold">
-            View All Products
-          </Button>
+          <Link href="/products">
+            <Button size="lg" className="mt-12 bg-red-500 font-bold">
+              View All Products
+            </Button>
+          </Link>
         </div>
       </section>
 
@@ -106,9 +109,11 @@ export default function Home() {
           title="Explore Our Products"
         />
         <div className="flex justify-center w-full items-center">
-          <Button size="lg" className="mt-12 bg-red-500 font-bold">
-            View All Products
-          </Button>
+          <Link href="/products">
+            <Button size="lg" className="mt-12 bg-red-500 font-bold">
+              View All Products
+            </Button>
+          </Link>
         </div>
       </section>
 

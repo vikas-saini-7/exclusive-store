@@ -37,10 +37,12 @@ export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async (data: RemoveFromCartPayload, { rejectWithValue }) => {
     try {
-      const res = await axios.delete("http://localhost:8000/api/cart", {
-        data: data,
-      });
-      return res.data;
+      const { userId, productId } = data;
+      const res = await axios.delete(
+        `http://localhost:8000/api/cart/${userId}/${productId}`
+      );
+      console.log(res.data);
+      return res.data.itemId;
     } catch (error: any) {
       return rejectWithValue(error.message);
     }

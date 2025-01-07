@@ -138,9 +138,14 @@ exports.getProductsByCategory = async (req, res) => {
       where: {
         categoryId: parseInt(categoryId),
       },
+      include: {
+        category: true,
+      },
     });
 
-    res.status(200).json(products);
+    res
+      .status(200)
+      .json({ message: "Products fetched successfully", products });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error });

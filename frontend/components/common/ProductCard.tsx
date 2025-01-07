@@ -64,7 +64,7 @@ export default function ProductCard({
     }
   };
   return (
-    <Card className="relative w-full max-w-sm overflow-hidden border-0">
+    <Card className="relative w-full h-full max-w-sm overflow-hidden border-0 p-4 bg-white shadow-none">
       {/* Discount Badge */}
       <Badge
         variant="destructive"
@@ -107,11 +107,11 @@ export default function ProductCard({
 
       {/* Product Image */}
       <Link href={`/products/${id}`}>
-        <div className="aspect-square overflow-hidden bg-white">
+        <div className="aspect-square overflow-hidden">
           <img
             src={imageUrl}
             alt={name}
-            className="h-full w-full object-contain bg-gray-100 rounded"
+            className="h-full w-full object-contain  rounded"
           />
         </div>
       </Link>

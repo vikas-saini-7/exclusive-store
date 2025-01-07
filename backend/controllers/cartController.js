@@ -49,12 +49,14 @@ exports.addItem = async (req, res) => {
 exports.removeItem = async (req, res) => {
   const { userId, productId } = req.params;
   try {
-    const cart = await prisma.cart.findFirst({ where: { userId } });
+    const cart = await prisma.cart.findFirst({
+      where: { userId: parseInt(userId) },
+    });
 
     if (!cart) return res.status(404).json({ error: "Cart not found" });
 
     const existingItem = await prisma.cartItem.findFirst({
-      where: { cartId: cart.id, productId },
+      where: { cartId: cart.id, productId: parseInt(productId) },
     });
 
     if (!existingItem)
@@ -65,13 +67,16 @@ exports.removeItem = async (req, res) => {
         where: { id: existingItem.id },
         data: { quantity: existingItem.quantity - 1 },
       });
-      return res
-        .status(200)
-        .json({ message: "Item quantity decreased", item: updatedItem });
+      return res.status(200).json({
+        message: "Item quantity decreased",
+        itemId: parseInt(productId),
+      });
     }
 
     await prisma.cartItem.delete({ where: { id: existingItem.id } });
-    res.status(200).json({ message: "Item removed from cart" });
+    res
+      .status(200)
+      .json({ message: "Item removed from cart", itemId: parseInt(productId) });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to remove item from cart" });

@@ -22,6 +22,7 @@ import {
   clearCart,
   getCart,
   removeCartItem,
+  removeFromCart,
 } from "@/store/actions/cartActions";
 import { IconChevronDown, IconChevronUp, IconTrash } from "@tabler/icons-react";
 
@@ -39,6 +40,12 @@ export default function page() {
   const handleAddToCart = (productId: number) => {
     if (userId) {
       dispatch(addToCart({ userId, productId }));
+    }
+  };
+
+  const handleRemoveFromCart = (productId: number) => {
+    if (userId) {
+      dispatch(removeFromCart({ userId, productId }));
     }
   };
 
@@ -121,7 +128,7 @@ export default function page() {
                           variant="ghost"
                           size="icon"
                           className="h-8 w-full rounded-b-md border-t hover:bg-gray-50 transition-colors duration-200"
-                          // onClick={() => updateQuantity(item.id, -1)}
+                          onClick={() => handleRemoveFromCart(item.product.id)}
                         >
                           <IconChevronDown className="h-4 w-4 text-gray-600 hover:text-gray-800" />
                         </Button>
