@@ -2,12 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { Input } from "../ui/input";
-import {
-  IconHeart,
-  IconLuggage,
-  IconSearch,
-  IconShoppingBag,
-} from "@tabler/icons-react";
+import { IconHeart, IconSearch, IconShoppingBag } from "@tabler/icons-react";
 import { UserHeaderAccount } from "./UserHeaderAccount";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -27,7 +22,7 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-8 flex items-center justify-between">
         <div>
           <Link href="/">
-            <h1 className="font-black text-xl">Exclusive</h1>
+            <h1 className="font-black text-xl">Logo</h1>
           </Link>
         </div>
         <nav>
