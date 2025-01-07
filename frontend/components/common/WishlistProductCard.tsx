@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
 import { removeItemFromWishlist } from "@/store/actions/wishlistActions";
+import { IconShoppingBag } from "@tabler/icons-react";
+import { addToCart } from "@/store/actions/cartActions";
 
 interface WishlistProductCardProps {
   id: number;
@@ -22,6 +24,12 @@ const WishlistProductCard: React.FC<WishlistProductCardProps> = ({
 }) => {
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const dispatch = useDispatch<AppDispatch>();
+
+  const handleAddToCart = () => {
+    if (userId) {
+      dispatch(addToCart({ userId, productId: id }));
+    }
+  };
 
   const handleRemove = () => {
     if (userId) {
@@ -75,23 +83,9 @@ const WishlistProductCard: React.FC<WishlistProductCardProps> = ({
         <Button
           className="w-full rounded-none rounded-b-lg bg-black hover:bg-black/90"
           size="lg"
+          onClick={handleAddToCart}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="mr-2"
-          >
-            <circle cx="9" cy="21" r="1" />
-            <circle cx="20" cy="21" r="1" />
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-          </svg>
+          <IconShoppingBag />
           Add To Cart
         </Button>
       </CardFooter>

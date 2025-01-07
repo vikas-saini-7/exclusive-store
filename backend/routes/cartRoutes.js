@@ -6,7 +6,7 @@ router.post("/", cartController.addItem);
 
 router.delete("/:userId/:productId", cartController.removeItem);
 
-router.delete("/:userId/:cartItemId", cartController.removeCartItem);
+router.delete("/item/:userId/:cartItemId", cartController.removeCartItem);
 
 router.delete("/:userId", cartController.clearCart);
 

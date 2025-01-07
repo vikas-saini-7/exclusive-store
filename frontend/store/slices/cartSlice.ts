@@ -1,5 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { addToCart, getCart, removeFromCart } from "../actions/cartActions";
+import {
+  addToCart,
+  clearCart,
+  getCart,
+  removeCartItem,
+  removeFromCart,
+} from "../actions/cartActions";
+import { toast } from "sonner";
+
 interface Product {
   id: number;
   name: string;
@@ -15,27 +23,23 @@ interface Product {
   updatedAt: string;
 }
 
-// interface CartItem {
-//   id: number;
-//   cartId: number;
-//   productId: number;
-//   quantity: number;
-//   createdAt: string;
-//   product: Product;
-// }
-
-// interface CartItems {
-//   [key: string]: CartItem;
-// }
+interface CartItem {
+  id: number;
+  cartId: number;
+  productId: number;
+  quantity: number;
+  createdAt: string;
+  product: Product;
+}
 
 interface CartState {
-  products: Product[];
+  items: CartItem[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: CartState = {
-  products: [],
+  items: [],
   loading: false,
   error: null,
 };
@@ -52,7 +56,17 @@ const cartSlice = createSlice({
       })
       .addCase(addToCart.fulfilled, (state, action: PayloadAction<any>) => {
         state.loading = false;
-        state.products.unshift(action.payload.product);
+        const itemIndex = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+        if (itemIndex >= 0) {
+          // Item exists, increment quantity
+          state.items[itemIndex].quantity += 1;
+        } else {
+          // New item, add to cart
+          state.items.unshift(action.payload);
+        }
+        toast.success("Added to cart successfully");
       })
       .addCase(addToCart.rejected, (state, action: PayloadAction<any>) => {
         state.loading = false;
@@ -67,7 +81,7 @@ const cartSlice = createSlice({
         removeFromCart.fulfilled,
         (state, action: PayloadAction<any>) => {
           state.loading = false;
-          state.products = state.products.filter(
+          state.items = state.items.filter(
             (product) => product.id !== action.payload.productId
           );
         }
@@ -78,12 +92,44 @@ const cartSlice = createSlice({
       })
 
       // get cart
+      .addCase(removeCartItem.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        removeCartItem.fulfilled,
+        (state, action: PayloadAction<any>) => {
+          state.loading = false;
+          state.items = state.items.filter(
+            (item) => item.id !== Number(action.payload)
+          );
+        }
+      )
+      .addCase(removeCartItem.rejected, (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // clear cart
+      .addCase(clearCart.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(clearCart.fulfilled, (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.items = [];
+        toast.success("Cart cleared successfully");
+      })
+      .addCase(clearCart.rejected, (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // get cart
       .addCase(getCart.pending, (state) => {
         state.loading = true;
       })
       .addCase(getCart.fulfilled, (state, action: PayloadAction<any>) => {
         state.loading = false;
-        state.products = action.payload.items;
+        state.items = action.payload;
       })
       .addCase(getCart.rejected, (state, action: PayloadAction<any>) => {
         state.loading = false;

@@ -1,8 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { AppDispatch, RootState } from "@/store";
+import { addToCart } from "@/store/actions/cartActions";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 interface Product {
   id: number;
@@ -18,6 +21,9 @@ interface Product {
 }
 
 const Page: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -48,6 +54,16 @@ const Page: React.FC = () => {
       <div className="container mx-auto px-8 py-12 text-red-500">{error}</div>
     );
   }
+
+  const handleAddToCart = () => {
+    if (userId) {
+      // Convert id to number and ensure it exists
+      const productId = id ? parseInt(id.toString(), 10) : null;
+      if (productId) {
+        dispatch(addToCart({ userId, productId }));
+      }
+    }
+  };
 
   return (
     <div className="container mx-auto px-8 py-12">
@@ -92,6 +108,7 @@ const Page: React.FC = () => {
                 product.stock > 0 ? "" : "bg-gray-400 cursor-not-allowed"
               }`}
               disabled={product.stock <= 0}
+              onClick={handleAddToCart}
             >
               {product.stock > 0 ? "Add to Cart" : "Unavailable"}
             </Button>
