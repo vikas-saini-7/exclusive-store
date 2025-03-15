@@ -190,7 +190,9 @@ export default function page() {
                 <span> ₹{subtotal.toFixed(2)}</span>
               </div>
             </div>
-            <Button className="w-full text-white">Proceed to checkout</Button>
+            <Link href="/checkout">
+              <Button className="w-full text-white">Proceed to checkout</Button>
+            </Link>
           </div>
         </div>
       </div>

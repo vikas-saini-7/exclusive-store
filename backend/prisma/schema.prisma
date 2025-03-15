@@ -142,12 +142,15 @@ model Address {
   id        Int     @id @default(autoincrement())
   userId    Int
   user      User    @relation(fields: [userId], references: [id])
+  name      String
   street    String
   city      String
   state     String
   zipCode   String
   country   String
   isDefault Boolean @default(false)
+  phone     String
+  email     String
   orders    Order[]
 }
 
@@ -164,7 +167,7 @@ model Order {
   discount      Float    @default(0)
   // taxAmount     Float    @default(0)
   shippingCost  Float    @default(0)
-  // trackingId    String?
+  trackingId    String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 

@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
 import cartReducer from "./slices/cartSlice";
 import wishlistReducer from "./slices/wishlistSlice";
+import addressReducer from "./slices/addressSlice";
 
 //admin
 import adminProductReducer from "./slices/adminProductSlice";
@@ -17,6 +18,7 @@ export const store = configureStore({
     // user
     wishlist: wishlistReducer,
     cart: cartReducer,
+    address: addressReducer,
 
     // admin slices
     adminProducts: adminProductReducer,

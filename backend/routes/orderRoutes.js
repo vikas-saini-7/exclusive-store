@@ -10,7 +10,7 @@ router.get("/", orderController.getAllOrders);
 router.post("/", orderController.createOrder);
 
 // Get order by user id
-router.get("/user/:id", orderController.getOrderByUser);
+router.get("/user/:id", orderController.getOrdersByUser);
 
 // Get order by id
 router.get("/:id", orderController.getOrder);
@@ -20,6 +20,9 @@ router.get("/:id", orderController.getOrder);
 
 // Update order status
 router.put("/:id/status", orderController.updateOrderStatus);
+
+// update trackingId
+router.put("/:id/tracking", orderController.updateTrackingId);
 
 // Delete order by id
 router.delete("/:id", orderController.deleteOrder);

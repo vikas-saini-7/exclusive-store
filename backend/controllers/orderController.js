@@ -35,7 +35,7 @@ const prisma = require("../prisma/client");
 //   discount      Float    @default(0)
 //   // taxAmount     Float    @default(0)
 //   shippingCost  Float    @default(0)
-//   // trackingId    String?
+//    trackingId    String?
 //   createdAt     DateTime @default(now())
 //   updatedAt     DateTime @updatedAt
 
@@ -62,33 +62,28 @@ const prisma = require("../prisma/client");
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await prisma.order.findMany({
-      include: {
-        orderItems: {
-          include: {
-            product: true,
-          },
-        },
-      },
+      include: { orderItems: { include: { product: true } } },
     });
-
-    res.status(200).json({ orders });
+    res.status(200).json(orders);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch orders" });
   }
 };
 
-// create order
 exports.createOrder = async (req, res) => {
-  const {
-    userId,
-    addressId,
-    paymentMethod,
-    totalAmount,
-    currency,
-    discount,
-    shippingCost,
-    orderItems,
-  } = req.body;
+  const { userId, addressId, paymentMethod, totalAmount, orderItems } =
+    req.body;
+
+  if (
+    !userId ||
+    !addressId ||
+    !paymentMethod ||
+    !totalAmount ||
+    !orderItems?.length
+  ) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
 
   try {
     const order = await prisma.order.create({
@@ -97,119 +92,106 @@ exports.createOrder = async (req, res) => {
         addressId,
         paymentMethod,
         totalAmount,
-        currency,
-        discount,
-        shippingCost,
+        trackingId: "PENDING",
+        status: "PENDING",
         orderItems: {
-          create: orderItems,
+          create: orderItems.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: item.price,
+            total: item.total,
+          })),
         },
-      },
-    });
-
-    res.status(201).json({ order });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-exports.getOrderByUser = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const orders = await prisma.order.findMany({
-      where: {
-        userId: parseInt(id),
       },
       include: {
         orderItems: {
-          include: {
-            product: true,
-          },
+          include: { product: true },
         },
+        user: true,
+        address: true,
       },
     });
 
-    res.status(200).json({ orders });
+    res.status(201).json(order);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    if (error.code === "P2003") {
+      return res.status(400).json({ error: "Invalid userId or addressId" });
+    }
+    res.status(500).json({ error: "Failed to create order" });
+  }
+};
+
+exports.getOrdersByUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const orders = await prisma.order.findMany({
+      where: { userId: parseInt(id) },
+      include: { orderItems: { include: { product: true } } },
+    });
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch orders" });
   }
 };
 
 exports.getOrder = async (req, res) => {
   const { id } = req.params;
-
   try {
     const order = await prisma.order.findUnique({
-      where: {
-        id: parseInt(id),
-      },
-      include: {
-        orderItems: {
-          include: {
-            product: true,
-          },
-        },
-      },
+      where: { id: parseInt(id) },
+      include: { orderItems: { include: { product: true } } },
     });
-
-    res.status(200).json({ order });
+    if (!order) return res.status(404).json({ error: "Order not found" });
+    res.status(200).json(order);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch order" });
   }
 };
-
-// exports.updateOrder = async (req, res) => {
-//   const { id } = req.params;
-//   const { status } = req.body;
-
-//   try {
-//     const order = await prisma.order.update({
-//       where: {
-//         id: parseInt(id),
-//       },
-//       data: {
-//         status,
-//       },
-//     });
-
-//     res.status(200).json({ order });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 exports.updateOrderStatus = async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
-
   try {
     const order = await prisma.order.update({
-      where: {
-        id: parseInt(id),
-      },
-      data: {
-        status,
-      },
+      where: { id: parseInt(id) },
+      data: { status },
+      include: { orderItems: { include: { product: true } } },
     });
-
-    res.status(200).json({ order });
+    res.status(200).json(order);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: "Failed to update order status" });
+  }
+};
+
+exports.updateTrackingId = async (req, res) => {
+  const { id } = req.params;
+  const { trackingId } = req.body;
+  try {
+    const order = await prisma.order.update({
+      where: { id: parseInt(id) },
+      data: { trackingId },
+      include: { orderItems: { include: { product: true } } },
+    });
+    res.status(200).json(order);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to update trackingId" });
   }
 };
 
 exports.deleteOrder = async (req, res) => {
   const { id } = req.params;
-
   try {
     await prisma.order.delete({
-      where: {
-        id: parseInt(id),
-      },
+      where: { id: parseInt(id) },
     });
-
-    res.status(200).json({ message: "Order deleted successfully" });
+    res.status(204).json({ message: "Order deleted", orderId: parseInt(id) });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: "Failed to delete order" });
   }
 };
