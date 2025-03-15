@@ -1,0 +1,192 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model User {
+//   id        Int      @id @default(autoincrement())
+//   name      String
+//   email     String?  @unique
+//   phone     String?  @unique
+//   password  String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model Category {
+//   id        Int      @id @default(autoincrement())
+//   name      String   @unique
+//   products  Product[]
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model Product {
+//   id          Int      @id @default(autoincrement())
+//   name        String
+//   description String
+//   price       Float
+//   discount    Float    @default(0.0)
+//   stock       Int
+//   sku         String   @unique
+//   imageUrl    String?
+//   isActive    Boolean  @default(true)
+//   categoryId  Int
+//   category    Category @relation(fields: [categoryId], references: [id])
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+
+//   @@index([categoryId])
+// }
+
+model User {
+  id       Int       @id @default(autoincrement())
+  name     String
+  email    String?   @unique
+  phone    String?   @unique
+  password String
+  wishlist Wishlist?
+  cart     Cart?
+
+  addresses Address[]
+  orders    Order[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id            Int            @id @default(autoincrement())
+  name          String
+  description   String
+  price         Float
+  discount      Float          @default(0.0)
+  stock         Int
+  sku           String         @unique
+  imageUrl      String?
+  isActive      Boolean        @default(true)
+  categoryId    Int
+  category      Category       @relation(fields: [categoryId], references: [id])
+  wishlistItems WishlistItem[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  CartItem      CartItem[]
+
+  orderItems OrderItem[] // New relation for orders
+
+  @@index([categoryId])
+}
+
+model Wishlist {
+  id     Int            @id @default(autoincrement())
+  userId Int            @unique
+  user   User           @relation(fields: [userId], references: [id])
+  items  WishlistItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WishlistItem {
+  id         Int      @id @default(autoincrement())
+  wishlistId Int
+  productId  Int
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([wishlistId, productId]) // Prevent duplicate product entries
+}
+
+model Cart {
+  id        Int        @id @default(autoincrement())
+  userId    Int        @unique
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  cartId    Int
+  productId Int
+  quantity  Int     @default(1)
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([cartId, productId]) // Prevent duplicate product entries in the cart
+}
+
+model Address {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  name      String
+  street    String
+  city      String
+  state     String
+  zipCode   String
+  country   String
+  isDefault Boolean @default(false)
+  phone     String
+  email     String
+  orders    Order[]
+}
+
+model Order {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  addressId     Int
+  user          User     @relation(fields: [userId], references: [id])
+  address       Address  @relation(fields: [addressId], references: [id])
+  paymentMethod String
+  status        String   @default("pending")
+  totalAmount   Float
+  currency      String   @default("INR")
+  discount      Float    @default(0)
+  // taxAmount     Float    @default(0)
+  shippingCost  Float    @default(0)
+  trackingId    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id        Int   @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int   @default(1)
+  price     Float // Price at order time
+  total     Float // quantity * price
+
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([orderId, productId]) // Ensures unique product per order
+}
